@@ -1,0 +1,3 @@
+#ignore all dot files except for git ignore
+.*
+!/.gitignore

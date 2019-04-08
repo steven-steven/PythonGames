@@ -286,13 +286,22 @@ def main(win):
     next_piece = get_shape()
     clock = pygame.time.Clock()
     fall_time = 0
-    fall_speed = 0.27 #smaller the value, more stops (slower) piece will make
+    fall_speed = 0.27 #smaller the value, faster
+    level_time = 0
 
     while run:
         grid = create_grid(locked_positions) #every movement, locked_positions can be changed. So update grid
         fall_time += clock.get_rawtime() #time since last clock.tick() (ms)
+        level_time += clock.get_rawtime()
         clock.tick()
-        if fall_time/1000 > fall_speed:    #stop fall after certain frame rate (time for whole while loop)
+
+        #change falling speed. Increase speed every five seconds
+        if level_time/1000 > 5: #every 5 seconds
+            level_time = 0
+            if fall_speed > 0.12:   #terminal max speed
+                fall_speed -= 0.005
+
+        if fall_time/1000 > fall_speed:    #move down every fall_speed milliseconds
             fall_time = 0
             current_piece.y += 1 #move piece down
             if not (valid_space(current_piece, grid)) and current_piece.y > 0:
